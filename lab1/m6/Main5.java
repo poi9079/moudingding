@@ -1,9 +1,8 @@
-package m6;
+package lab1.m6;
 
 import java.util.*;
 
 public class Main5 {
-    // Test Data for the program
     private static String[] moduleCode = {"ITD2322", "ICT2422", "ITD2321", "ICT2669"};
     private static String[] studentID = {"1", "2", "3", "4", "5", "6", "7", "8"};
     private static int[][] marks = {{30, 40, 50, 60, 45, 55, 65, 75}, // mark for ITD2322
@@ -16,24 +15,24 @@ public class Main5 {
             {'C', 'B', 'E', 'D', 'C', 'B', 'C', 'A'}}; // mark for ICT2669
 
     public static void main(String[] argv) {
-        int index = getModuleIndex(argv[1]);
         if (argv.length != 3) {
             System.out.println("Usage: java Main5 {letter | numeric } {average | median | beststudent} <module code>");
             System.exit(1);
         }
+        int index = getModuleIndex(argv[1]);
 
         // the main logic of this program, to be implemented by you!
 
         if (argv[0].equals("letter"))
-            switch (argv[0]) {
+            switch (argv[1]) {
                 case "average":
-                    System.out.print("The average mark of module " + argv[2] + " = " + calculateCharModuleAverageMark(argv[1]));
+                    System.out.print("The average mark of module " + argv[2] + " = " + calculateCharModuleAverageMark(argv[2]));
                     break;
                 case "median":
-                    System.out.print("The median mark of module " + argv[2] + " = " + calculateCharModuleMedian(argv[1]));
+                    System.out.print("The median mark of module " + argv[2] + " = " + calculateCharModuleMedian(argv[2]));
                     break;
                 case "beststudent":
-                    displayBestStudent(argv[2]);
+                    displayCharBestStudent(argv[2]);
                     break;
                 default:
                     System.out.println("Usage: java Main {average | median | beststudent} <module code>");
@@ -41,16 +40,16 @@ public class Main5 {
 
             }
 
-        else if(argv[0].equals("numeric")){
-            switch (argv[0]) {
+        else if (argv[0].equals("numeric")) {
+            switch (argv[1]) {
                 case "average":
-                    System.out.print("The average mark of module " + argv[1] + " = " + calculateIntModuleAverageMark(argv[1]));
+                    System.out.print("The average mark of module " + argv[2] + " = " + calculateIntModuleAverageMark(argv[2]));
                     break;
                 case "median":
-                    System.out.print("The median mark of module " + argv[1] + " = " + calculateIntModuleMedian(argv[1]));
+                    System.out.print("The median mark of module " + argv[2] + " = " + calculateIntModuleMedian(argv[2]));
                     break;
                 case "beststudent":
-                    displayBestStudent(argv[1]);
+                    displayIntBestStudent(argv[2]);
                     break;
                 default:
                     System.out.println("Usage: java Main {average | median | beststudent} <module code>");
@@ -87,6 +86,7 @@ public class Main5 {
         // return the median mark of a module (module code as input parameter "mCode")
 
     }
+
     public static double calculateIntModuleMedian(String mCode) {
         int index = getModuleIndex(mCode);
         int mmarks[] = marks[index];
@@ -95,7 +95,19 @@ public class Main5 {
                 mmarks[mmarks.length / 2] : (mmarks[mmarks.length / 2] + mmarks[mmarks.length / 2 - 1]) / 2.0;
     }
 
-    public static void displayBestStudent(String mCode) {
+    public static void displayCharBestStudent(String mCode) {
+        int index = getModuleIndex(mCode);
+        System.out.println("In module " + mCode + ", the following students perform the best:");
+        int best = 0;
+        for (int i = 0; i < marks2[index].length; i++)
+            best = (letterToNumeric(marks2[index][i]) > letterToNumeric(marks2[index][best])) ? i : best;
+        for (int i = 0; i < marks2[index].length; i++) {
+            if (letterToNumeric(marks2[index][i]) == letterToNumeric(marks2[index][best]))
+                System.out.println("Student " + studentID[i]);
+        }
+    }
+
+    public static void displayIntBestStudent(String mCode) {
         int index = getModuleIndex(mCode);
         System.out.println("In module " + mCode + ", the following students perform the best:");
         int mmarks[] = marks[index];
@@ -122,6 +134,7 @@ public class Main5 {
                 return 0;
         }
     }
+
     public static int letterToNumeric(char grade) {
         switch (grade) {
             case 'A':
